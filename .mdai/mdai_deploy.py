@@ -51,8 +51,6 @@ class MDAIModel:
                     if self.histogram_eq:
                         arr = histogram_equalize(arr[:, :, 0]) * 255
                         arr = np.stack((arr,) * 3, -1)
-                    
-                    del model
 
                     image = preprocess_image(arr.copy())
                     image, scale = resize_image(image)
@@ -64,6 +62,8 @@ class MDAIModel:
                     boxes, scores, labels = model.predict_on_batch(
                         np.expand_dims(image, axis=0),
                     )[:3]
+
+                    del model
 
                     # correct boxes for image scale
                     boxes /= scale
